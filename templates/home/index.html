@@ -1,0 +1,46 @@
+{% extends 'layouts/default.html' %}
+{% block title%}Home/Index{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-header">Home</div>
+
+    <div class="card-body">    
+    
+    <table>
+      <tr>
+        <td colspan="2">REAL TIME</td>
+      </tr>
+      <tr>
+        <td>Хүлээгдэж байгаа</td>
+        <td>{{data[0]['pending']}}</td>
+      </tr>
+      <tr>
+          <td>Дууссан</td>
+          <td>{{data[0]['finished']}}</td>
+        </tr>
+        <tr>
+            <td>Алдаатай</td>
+            <td>{{data[0]['error']}}</td>
+         </tr>
+    </table>
+    <br>
+    <br>
+    <table>
+      <tr>
+        <td colspan="2">SCHEDULE</td>
+      </tr>
+      <tr>
+        <td>Хүлээгдэж байгаа</td>
+        <td>{{data[1]['pending']}}</td>
+      </tr>
+      <tr>
+          <td>Дууссан</td>
+          <td>{{data[1]['finished']}}</td>
+        </tr>
+        <tr>
+            <td>Алдаатай</td>
+            <td>{{data[1]['error']}}</td>
+         </tr>
+    </table>
+</div>
+{% endblock %}

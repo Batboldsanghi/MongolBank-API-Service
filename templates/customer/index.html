@@ -1,0 +1,84 @@
+{% extends 'layouts/default.html' %}
+{% block title%}Customer/Index{% endblock %}
+{% block headers%}
+
+<link rel="stylesheet" href="/static/css/jquery.dataTables.min.css">
+
+{% endblock %}
+{% block content %}
+
+<div class="card">
+    <div class="card-header">Customer</div>
+    
+    <div class="card-body">
+        <table id="customerTable" class="display" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Register Number</th>
+                    <th>Lastname</th>
+                    <th>Firstname</th>                    
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                              
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block footer %}
+<script src="/static/js/jquery-3.3.1.min.js"></script>
+<script src="/static/js/jquery.dataTables.min.js"></script>
+
+<script type="text/javascript">
+    
+    $(function(){
+        $.noConflict();        
+        var csrf_token = "{{ csrf_token() }}";
+
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrf_token);
+                }
+            }
+        });
+        var cTable = $("#customerTable").DataTable({
+            ajax: {
+                url:"/customer/jsonlist",
+                type:"POST",
+                contentType: "application/json; charset=utf-8",
+                data: function(d){                                        
+                    d.search.value=$('#customerTable_filter input').val()
+                    return JSON.stringify(d);
+                }
+            },
+            processing: true,
+            serverSide:true,
+            pageLength:10,
+            pagingType: "simple_numbers",
+            searching:true,
+            columns: [
+                { data: "rnumber",orderable:false},
+  	            { data: "lastname",orderable:false},
+                { data: "firstname",orderable:false},
+                {orderable:false, render:function(d,t,r) {
+                    return ""
+                }}
+            ]
+        })
+
+        $('#customerTable_filter input').unbind();
+        $('#customerTable_filter input').bind('keyup', function(e) {
+            console.log(this.value)
+            if(e.keyCode == 13) {
+                cTable.ajax.reload()
+            }
+        });    
+    });
+</script>
+{% endblock %}

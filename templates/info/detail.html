@@ -1,0 +1,132 @@
+{% extends 'layouts/default.html' %}
+{% block title%}Info/Detail{% endblock %}
+{% block content %}
+<style>
+.table-wrapper {
+    max-height: 100px;
+    overflow: auto;
+    display:inline-block;
+}
+.table-wrapper-scroll-y {
+display: block;
+}
+</style>
+<div class="card">
+    <div class="card-header">Detail</div>
+    <div class="card-body">
+    <form action="/home/info/detail" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <div class="form-group">
+                <label for="rnumber">Register Number</label>
+                <input type="text" class="form-control" name="rnumber" id="rnumber" aria-describedby="emailHelp" placeholder="Enter register number">                
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <br>
+    <br>
+    {% if info!=None %}    
+    <table>
+        <tr>
+            <td>Нэр</td>
+            <td>{{info['profile'][0]}} {{info['profile'][1]}}</td>
+        </tr>
+        <tr>
+            <td>Регистрийн дугаар</td><td>{{info['profile'][4]}}</td>
+        </tr>
+        <tr>
+            <td>Төрсөн огноо</td>
+            <td>{{info['profile'][5].split('T')[0]}}</td>
+        </tr>
+        <tr>
+            <td>Хаяг</td>
+            <td>{{info['profile'][6]}}</td>
+        </tr>
+    </table>
+    <br>
+    <div class="table-wrapper table-responsive">
+            <table class="table table-striped table-bordered table-sm">
+                <thead>
+                    <tr>
+                        <th>№</th>                
+                        <th>Олгосон огноо</th>
+                        <th>Төлөгдөх огноо</th>
+                        <th>Валют</th>
+                        <th>Зээлийн хэмжээ</th>
+                        <th>Үлдэгдэл</th>
+                        <th>Зээлийн төрөл</th>
+                        <th>Зээлдүүлэгч</th>
+                        <th>Төлөв</th>
+                        <th>Ангилал</th>
+                        <th>pred_tag</th>
+                        <th>payment_pred</th>
+                        <th>payment_pred_last</th>
+                        <th>rate_mean</th>
+                        <th>rate_pred</th>
+                        <th>month0</th>
+                        <th>kheviin</th>
+                        <th>khugatsaakhetersen</th>
+                        <th>kheviinbus</th>
+                        <th>ergelzeetei</th>
+                        <th>muu</th>
+                        <th>buleg</th>
+                        <th>dedbuleg</th>
+                        <th>ukhekhbg_yndugaar</th>
+                        <th>ulsynburtgeliindugaar</th>
+                        <th>kartyndugaar</th>
+                        <th>tailbar</th>                
+                        <th>heviinbus_uldegdeltei</th>
+                        <th>heviinbus_uldegdelgui</th>
+                        <th>heviinbus_shugam</th>
+                        <th>new_loan</th>
+                    </tr>
+                    
+                </thead>
+                <tbody>
+                    {% for row in info['ddrows'] %}
+                    <tr>
+                        <td>{{row.dd}}</td>
+                        <td><nobr>{{row.zeelolgosonognoo.strftime('%Y-%m-%d')}}</nobr></td>
+                        <td><nobr>{{row.tologdokhognoo.strftime('%Y-%m-%d')}}</nobr></td>
+                        <td>{{row.valiutynner}}</td>
+                        <td style="text-align:right">{{'{:,.2f}'.format(row.zeeliinkhemzhee)}}</td>
+                        <td style="text-align:right">{{'{:,.2f}'.format(row.oriinuldegdel)}}</td>
+                        <td>{{row.loantypecode}}</td>
+                        <td>{{row.orgcode}}</td>
+                        <td>{{row.statuscode}}</td>
+                        <td>{{row.loanclasscode}}</td>
+                        <td style="text-align:right">{% if row.pred_tag !=None %}{{'{:d}'.format(row.pred_tag)}}{% else %}None{% endif %}</td>
+                        <td style="text-align:right">{% if row.payment_pred !=None %}{{'{:,.2f}'.format(row.payment_pred)}}{% else %}None{% endif %}</td>
+                        <td style="text-align:right">{% if row.payment_pred_last !=None %}{{'{:,.2f}'.format(row.payment_pred_last)}}{% else %}None{% endif %}</td>
+                        <td style="text-align:right">{% if row.rate_mean !=None %}{{'{}'.format(row.rate_mean)}}{% else %}None{% endif %}</td>
+                        <td style="text-align:right">{% if row.rate_pred !=None %}{{'{}'.format(row.rate_pred)}}{% else %}None{% endif %}</td>
+                        <td style="text-align:right">{% if row.month0 !=None %}{{'{:d}'.format(row.month0)}}{% else %}None{% endif %}</td>
+                        <td>{{row.kheviin}}</td>
+                        <td>{{row.khugatsaakhetersen}}</td>
+                        <td>{{row.kheviinbus}}</td>
+                        <td>{{row.ergelzeetei}}</td>
+                        <td>{{row.muu}}</td>
+                        <td>{{row.buleg}}</td>
+                        <td>{{row.dedbuleg}}</td>
+                        <td>{{row.ukhekhbg_yndugaar}}</td>
+                        <td>{{row.ulsynburtgeliindugaar}}</td>
+                        <td>{{row.kartyndugaar}}</td>
+                        <td>{{row.tailbar}}</td>
+                        <td>{{row.heviinbus_uldegdeltei}}</td>
+                        <td>{{row.heviinbus_uldegdelgui}}</td>
+                        <td>{{row.heviinbus_shugam}}</td>
+                        <td>{{row.new_loan}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>        
+            </table>
+    </div>
+    
+    {% if(ff is not none) %}
+        <a href="/home/info/getfile/{{ff}}">download pdf</a>
+    {% endif %}
+    {% else %}
+        not found record
+    {% endif %}
+    </div>
+{% endblock %}

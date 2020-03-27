@@ -1,0 +1,23 @@
+{% extends 'layouts/default.html' %}
+{% block title%}Info/Import/Real{% endblock %}
+{% block content %}    
+
+<div class="card">
+    <div class="card-header">Import Real</div>
+    <div class="card-body">        
+        <form action="/home/info/import/real" method="POST"  enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <div class="form-group">
+                    <label for="rnumber">Регистрийн дугаар</label>                
+                    <textarea name="rnumbers" class="form-control" rows="10" placeholder="Enter register number"></textarea>
+            </div>
+            <div class="form-group">
+                    <label for="rnumbers_file">Файл</label>                                
+                    <input type="file" class="form-control" name="rnumbers_file">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>                           
+        </form>
+    </div>
+</div>
+    
+{% endblock %}
